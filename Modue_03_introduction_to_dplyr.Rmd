@@ -1,0 +1,69 @@
+---
+title: "introduction to dplyr"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##library
+
+```{r cars}
+library(tidyverse)
+library(gapminder)
+```
+
+## 22.0.2 say hello to gapminder tibble 
+
+
+```{r gap minder}
+gapminder
+class(gapminder)
+
+
+```
+##22.1
+```{r}
+canada<-gapminder[241:252,]
+
+```
+
+##22.2 use filter( ) to subset data row-wise
+```{r}
+filter(gapminder, lifeExp < 29)
+
+filter(gapminder, country=="Rwanda", year>1979)
+
+filter(gapminder, country %in% c("Rwanda","Afghanistan"))
+
+
+```
+
+##22.3 meat the new pipe operator
+```{r}
+gapminder %>% 
+  head(3)
+
+```
+
+##22.4 Use select() to subset the data on variables columns.
+```{r}
+select(gapminder, year, lifeExp)
+
+```
+or
+```{r}
+gapminder %>%
+  select(year,lifeExp)%>%
+  head(4)
+
+```
+
+##22.5 Revel in the convenience
+
+```{r}
+gapminder %>%
+  filter(country=="Cambodia") %>%
+  select(year, lifeExp)
+```
