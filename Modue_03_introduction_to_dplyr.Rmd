@@ -67,3 +67,101 @@ gapminder %>%
   filter(country=="Cambodia") %>%
   select(year, lifeExp)
 ```
+
+##23.3
+
+```{r}
+my_gap<-gapminder
+my_gap
+my_precious<- my_gap %>%
+  filter(country == "Canada")
+my_precious
+
+```
+
+##23.3.3 mutate
+
+```{r}
+
+my_gap %>%
+  mutate(gdp = pop * gdpPercap)
+
+ctib<-my_gap%>%
+  filter(country=="Canada")
+
+my_gap<-my_gap%>%
+  mutate(tmp=rep(ctib$gdpPercap, nlevels(country)), gdpPercapRel=gdpPercap/tmp,
+         tmp=NULL)
+
+my_gap%>%
+  filter(country=="Canada")%>%
+  select(country, year, gdpPercapRel)
+
+  summary(my_gap$gdpPercapRel)
+```
+##23.3.4 arrange()
+```{r}
+my_gap%>%
+  arrange(year,country)
+
+my_gap%>%
+  filter(year==2007)%>%
+  arrange(desc(lifeExp))
+
+```
+
+##23.3.5 rename()
+```{r}
+my_gap%>%
+  rename(life_Exp=lifeExp,
+         gdp_percap=gdpPercap,
+         ged_percap_rel=gdpPercapRel)
+```
+
+##23.3.6 select()
+```{r}
+my_gap%>%
+  filter(country=="Burundi",year>1996)%>%
+  select(yr=year,lifeExp,gdpPercap)%>%
+  select(gdpPercap,everything())
+
+```
+
+##23.3.7.1
+```{r}
+my_gap%>%
+  group_by(continent)%>%
+  summarize(n=n())
+
+str(table(gapminder$continent))
+
+my_gap%>%
+  group_by(continent)%>%
+  tally()
+
+my_gap%>%
+  group_by(continent)%>%
+  summarize(n=n(),n_contries=n_distinct(country))
+```
+
+##23.3.7.2 General summarization
+
+```{R}
+my_gap %>%
+  group_by(continent) %>%
+  summarize(avg_lifeExp = mean(lifeExp))
+
+my_gap %>%
+  filter(year %in% c(1952, 2007)) %>%
+  group_by(continent, year) %>%
+  summarize_at(vars(lifeExp, gdpPercap), list(~mean(.), ~median(.)))
+```
+
+##23.3.8.1 group-wise summaries
+```{r}
+my_gap %>% 
+  group_by(country) %>% 
+  select(country, year, lifeExp) %>% 
+  mutate(lifeExp_gain = lifeExp - first(lifeExp))%>% 
+  filter(year < 1963)
+```
